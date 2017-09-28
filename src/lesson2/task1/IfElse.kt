@@ -2,6 +2,7 @@
 package lesson2.task1
 
 import lesson1.task1.discriminant
+import lesson1.task1.sqr
 
 /**
  * Пример
@@ -102,7 +103,18 @@ fun rookOrBishopThreatens(kingX: Int, kingY: Int,
  * прямоугольным (вернуть 1) или тупоугольным (вернуть 2).
  * Если такой треугольник не существует, вернуть -1.
  */
-fun triangleKind(a: Double, b: Double, c: Double): Int = TODO()
+fun triangleKind(a: Double, b: Double, c: Double): Int {
+    var max = maxOf(a, b, c)
+    var min = minOf(a, b, c)
+    var middle = a + b + c - min - max;
+    return when {
+        (max > min + middle) -> -1
+        sqr(min) + sqr(middle) < sqr(max) -> 2
+        sqr(min) + sqr(middle) > sqr(max) -> 0
+        else -> 1
+    }
+}
+
 
 /**
  * Средняя
@@ -112,4 +124,14 @@ fun triangleKind(a: Double, b: Double, c: Double): Int = TODO()
  * Найти длину пересечения отрезков AB и CD.
  * Если пересечения нет, вернуть -1.
  */
-fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int = TODO()
+fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
+    return when {
+        ((a > d) || (c > b)) -> -1
+        (b==c) -> 0
+        ((c > a) && (b > d)) -> d - c
+        ((c > a) && (b < d)) -> b - c
+        ((c < a) && (b > d)) -> d - a
+        ((c < a) && (b < d)) -> b - a
+        else -> -8
+    }
+}
