@@ -1,6 +1,8 @@
 @file:Suppress("UNUSED_PARAMETER")
 package lesson3.task1
 
+import lesson4.task1.abs
+
 /**
  * Пример
  *
@@ -63,7 +65,7 @@ fun digitCountInNumber(n: Int, m: Int): Int =
 fun digitNumber(n: Int): Int {
     if (n == 0) { return 1 }  else {
         var a = 0
-        var s = n
+        var s = abs(n)
         while (s > 0) {
             a++
             s = s / 10
