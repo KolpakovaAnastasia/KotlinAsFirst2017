@@ -1,8 +1,6 @@
 @file:Suppress("UNUSED_PARAMETER")
 package lesson3.task1
 
-import lesson4.task1.abs
-
 /**
  * Пример
  *
@@ -62,13 +60,17 @@ fun digitCountInNumber(n: Int, m: Int): Int =
  * Найти количество цифр в заданном числе n.
  * Например, число 1 содержит 1 цифру, 456 -- 3 цифры, 65536 -- 5 цифр.
  */
+
 fun digitNumber(n: Int): Int {
     if (n == 0) { return 1 }  else {
         var a = 0
-        var s = abs(n)
+        var s = 0
+        if (n > 0) {
+            s = n
+        } else s = -1 * n;
         while (s > 0) {
             a++
-            s = s / 10
+            s /= 10
         }
         return a
     }
