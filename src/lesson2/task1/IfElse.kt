@@ -3,6 +3,7 @@ package lesson2.task1
 
 import lesson1.task1.discriminant
 import lesson1.task1.sqr
+import java.lang.Math.*
 
 /**
  * Пример
@@ -104,9 +105,9 @@ fun rookOrBishopThreatens(kingX: Int, kingY: Int,
  * Если такой треугольник не существует, вернуть -1.
  */
 fun triangleKind(a: Double, b: Double, c: Double): Int {
-    var max = maxOf(a, b, c)
-    var min = minOf(a, b, c)
-    var middle = a + b + c - min - max;
+    val max = maxOf(a, b, c)
+    val min = minOf(a, b, c)
+    val middle = a + b + c - min - max;
     return when {
         (max > min + middle) -> -1
         sqr(min) + sqr(middle) < sqr(max) -> 2
