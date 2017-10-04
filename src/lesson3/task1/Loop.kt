@@ -1,6 +1,8 @@
 @file:Suppress("UNUSED_PARAMETER")
 package lesson3.task1
 
+import sun.font.TrueTypeFont
+
 /**
  * Пример
  *
@@ -202,7 +204,26 @@ fun revert(n: Int): Int {
  * первая цифра равна последней, вторая -- предпоследней и так далее.
  * 15751 -- палиндром, 3653 -- нет.
  */
-fun isPalindrome(n: Int): Boolean = TODO()
+fun isPalindrome(n: Int): Boolean {
+    var n1 = n
+    var d2 = 1
+    var n2 = 0
+    if (n == 0) n2 == 0
+    else {
+        while (n1 > 0) {
+            n1 /= 10
+            d2 *= 10
+        }
+        d2 /= 10
+        n1 = n
+        while (n1 > 0) {
+            n2 += (n1 % 10) * d2
+            n1 /= 10
+            d2 /= 10
+        }
+    }
+    return (n == n2)
+}
 
 /**
  * Средняя
