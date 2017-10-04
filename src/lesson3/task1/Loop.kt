@@ -144,6 +144,20 @@ fun squareBetweenExists(m: Int, n: Int): Boolean = TODO()
  * Нужную точность считать достигнутой, если очередной член ряда меньше eps по модулю
  */
 fun sin(x: Double, eps: Double): Double = TODO()
+/*{
+    var sinx = x
+    var k = 1.0
+    var i = 1.0
+    var f = 1.0
+    while (Math.abs(sinx + k *(-1.0) * Math.pow(x,i+2.0) / (f * (f + 1.0) * (f + 2.0))) >= eps) {
+        k *= -1.0
+        i += 2.0
+        f *= (f + 1.0) * (f + 2.0)
+        sinx += k * Math.pow(x,i)/f
+    }
+    return sinx
+}
+*/
 
 /**
  * Средняя
@@ -160,7 +174,26 @@ fun cos(x: Double, eps: Double): Double = TODO()
  * Поменять порядок цифр заданного числа n на обратный: 13478 -> 87431.
  * Не использовать строки при решении задачи.
  */
-fun revert(n: Int): Int = TODO()
+fun revert(n: Int): Int {
+    var n1 = n
+    var d2 = 1
+    if (n == 0) return n
+    else {
+        while (n1 > 0) {
+            n1 /= 10
+            d2 *= 10
+        }
+        d2 /= 10
+        n1 = n
+        var n2 = 0
+        while (n1 > 0) {
+            n2 += (n1 % 10) * d2
+            n1 /= 10
+            d2 /= 10
+        }
+        return n2
+    }
+}
 
 /**
  * Средняя
