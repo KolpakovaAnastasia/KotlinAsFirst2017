@@ -14,7 +14,7 @@ fun sqRoots(y: Double) =
             y == 0.0 -> listOf(0.0)
             else -> {
                 val root = Math.sqrt(y)
-                // Результат!
+// Результат!
                 listOf(-root, root)
             }
         }
@@ -106,7 +106,7 @@ fun buildSumExample(list: List<Int>) = list.joinToString(separator = " + ", post
  * по формуле abs = sqrt(a1^2 + a2^2 + ... + aN^2).
  * Модуль пустого вектора считать равным 0.0.
  */
-fun abs(v: Int): Double = TODO()
+fun abs(v: List<Double>): Double = TODO()
 
 /**
  * Простая
@@ -148,7 +148,8 @@ fun polynom(p: List<Double>, x: Double): Double = TODO()
  * Средняя
  *
  * В заданном списке list каждый элемент, кроме первого, заменить
- * суммой данного элемента и всех предыдущих.
+ * суммой данного элемента
+и всех предыдущих.
  * Например: 1, 2, 3, 4 -> 1, 3, 6, 10.
  * Пустой список не следует изменять. Вернуть изменённый список.
  *
