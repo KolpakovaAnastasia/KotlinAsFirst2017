@@ -174,7 +174,6 @@ class Tests {
         assertEquals(3, revert(3))
         assertEquals(111, revert(111))
         assertEquals(17571, revert(17571))
-        assertEquals(123456789, revert(987654321))
     }
 
     @Test
@@ -184,6 +183,7 @@ class Tests {
         assertFalse(isPalindrome(3653))
         assertTrue(isPalindrome(15751))
         assertTrue(isPalindrome(24688642))
+        assertTrue(isPalindrome(1249889421))
     }
 
     @Test

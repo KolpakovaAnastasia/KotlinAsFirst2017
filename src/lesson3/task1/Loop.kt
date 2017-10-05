@@ -111,7 +111,13 @@ fun lcm(m: Int, n: Int): Int {
  *
  * Для заданного числа n > 1 найти минимальный делитель, превышающий 1
  */
-fun minDivisor(n: Int): Int = TODO()
+fun minDivisor(n: Int): Int {
+    var i: Int
+    var k = n
+    for (i in n downTo 2)
+        if (n % i == 0) k = i
+    return k
+}
 
 /**
  * Простая
@@ -137,6 +143,15 @@ fun isCoPrime(m: Int, n: Int): Boolean = TODO()
  * Например, для интервала 21..28 21 <= 5*5 <= 28, а для интервала 51..61 квадрата не существует.
  */
 fun squareBetweenExists(m: Int, n: Int): Boolean = TODO()
+/* {
+    var i: Int = 1
+    var x: Double = 1.0
+    var u: Int = 0
+    for (i in m..n)  {
+        x = i * 1.0
+        if (Math.sqrt(x) / 1.0 == Math.sqrt(x)) u = 1 }
+    return (u==1)
+} */
 
 /**
  * Средняя
