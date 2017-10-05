@@ -2,6 +2,7 @@
 package lesson3.task1
 
 import sun.font.TrueTypeFont
+import java.lang.Math.pow
 
 /**
  * Пример
@@ -224,23 +225,15 @@ fun isPalindrome(n: Int): Boolean = (revert(n) == n)
  * Например, 54 и 323 состоят из разных цифр, а 111 и 0 из одинаковых.
  */
 fun hasDifferentDigits(n: Int): Boolean {
-    var i: Int
-    var n1: Int = 0
-    var r = n
-    var k: Int = 0
-    var z = 0
-    while (r > 0) {
-        n1++
-        r /= 10
-    }
-    r = n
-    for (i in 1..9)
-        if (r % 10 == i) {
-            k++
-            r /= 10
-            if (n1 == k) z = 1
+    var l = 0
+    var n1 = n
+    while (n1 > 10) {
+        if (n1 % 10 != n1 % 100 / 10) {
+            l += 1
         }
-    return (z == 1)
+        n1 /= 10
+    }
+    return l != 0
 }
 /**
  * Сложная
@@ -249,7 +242,27 @@ fun hasDifferentDigits(n: Int): Boolean {
  * 149162536496481100121144...
  * Например, 2-я цифра равна 4, 7-я 5, 12-я 6.
  */
-fun squareSequenceDigit(n: Int): Int = TODO()
+fun squareSequenceDigit(n: Int): Int {
+    var k = 0
+    var c = 0
+    var i = 1
+    while (n > c) {
+        k = i * i
+        while (k > 0) {
+            k /= 10
+            c++
+        }
+        k = i * i
+        i++
+    }
+    val m = c - n
+    if (c > n) {
+        for (j in 1..m) {
+            k /= 10
+        }
+    }
+    return k % 10
+}
 
 /**
  * Сложная
@@ -258,4 +271,31 @@ fun squareSequenceDigit(n: Int): Int = TODO()
  * 1123581321345589144...
  * Например, 2-я цифра равна 1, 9-я 2, 14-я 5.
  */
-fun fibSequenceDigit(n: Int): Int = TODO()
+fun fibSequenceDigit(n: Int): Int {
+    n == 1
+    var k = 0
+    var c = 1
+    var d = 0
+    var d1 = 1
+    var d2 = 0
+    if (n == 1) k = 1
+    while (n > c) {
+        k = d + d1
+        while (k > 0) {
+            k /= 10
+            c++
+        }
+        k = d + d1
+        d2 = d
+        d = d1
+        d1 = d2 + d
+    }
+    val m = c - n
+    if (c > n) {
+        for (j in 1..m) {
+            k /= 10
+        }
+    }
+    return k % 10
+}
+
