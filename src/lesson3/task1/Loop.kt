@@ -178,25 +178,15 @@ fun cos(x: Double, eps: Double): Double = TODO()
  */
 fun revert(n: Int): Int {
     var n1 = n
-    var d2 = 1
-    if (n == 0) return n
-    else {
-        while (n1 > 0) {
+    var n2 = 0
+    var d2: Int
+    while (n1 > 0) {
+        d2 = n1 % 10
+        n2 = n2 * 10 + d2
             n1 /= 10
-            d2 *= 10
-        }
-        d2 /= 10
-        n1 = n
-        var n2 = 0
-        while (n1 > 0) {
-            n2 += (n1 % 10) * d2
-            n1 /= 10
-            d2 /= 10
-        }
-        return n2
     }
+    return n2
 }
-
 /**
  * Средняя
  *
@@ -204,26 +194,7 @@ fun revert(n: Int): Int {
  * первая цифра равна последней, вторая -- предпоследней и так далее.
  * 15751 -- палиндром, 3653 -- нет.
  */
-fun isPalindrome(n: Int): Boolean {
-    var n1 = n
-    var d2 = 1
-    var n2 = 0
-    if (n == 0) n2 == 0
-    else {
-        while (n1 > 0) {
-            n1 /= 10
-            d2 *= 10
-        }
-        d2 /= 10
-        n1 = n
-        while (n1 > 0) {
-            n2 += (n1 % 10) * d2
-            n1 /= 10
-            d2 /= 10
-        }
-    }
-    return (n == n2)
-}
+fun isPalindrome(n: Int): Boolean = (revert(n) == n)
 
 /**
  * Средняя
