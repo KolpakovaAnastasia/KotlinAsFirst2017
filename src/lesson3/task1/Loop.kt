@@ -67,9 +67,7 @@ fun digitCountInNumber(n: Int, m: Int): Int =
 fun digitNumber(n: Int): Int {
     if (n == 0) { return 1 }  else {
         var a = 0
-        var s = n
-        if (n < 0) {
-            s = -1 * n; }
+        var s = Math.abs(n)
         while (s > 0) {
             a++
             s /= 10
@@ -229,7 +227,7 @@ fun hasDifferentDigits(n: Int): Boolean {
     var n1 = n
     while (n1 > 10) {
         if (n1 % 10 != n1 % 100 / 10) {
-            l += 1
+            l++
         }
         n1 /= 10
     }

@@ -54,18 +54,13 @@ fun ageDescription(n: Int): String =
 fun timeForHalfWay(t1: Double, v1: Double,
                    t2: Double, v2: Double,
                    t3: Double, v3: Double): Double {
-    val s : Double
-    s = (t1 * v1 + t2 * v2 + v3 * t3) / 2
+    val s = (t1 * v1 + t2 * v2 + v3 * t3) / 2
     return when {
         t1 * v1 == s -> t1
         t1 * v1 + t2 * v2 == s -> t1 + t2
-        else -> {
-            when {
-                s < t1 * v1 -> s / v1
-                (s > t1 * v1) && (s < t1 * v1 + t2 * v2) -> t1 + (s - v1 * t1) / v2
-                else -> t1 + t2 + (s - v1 * t1 - v2 * t2) / v3
-            }
-        }
+        s < t1 * v1 -> s / v1
+        (s > t1 * v1) && (s < t1 * v1 + t2 * v2) -> t1 + (s - v1 * t1) / v2
+        else -> t1 + t2 + (s - v1 * t1 - v2 * t2) / v3
     }
 }
 
@@ -107,7 +102,7 @@ fun rookOrBishopThreatens(kingX: Int, kingY: Int,
 fun triangleKind(a: Double, b: Double, c: Double): Int {
     val max = maxOf(a, b, c)
     val min = minOf(a, b, c)
-    val middle = a + b + c - min - max;
+    val middle = a + b + c - min - max
     return when {
         (max > min + middle) -> -1
         sqr(min) + sqr(middle) < sqr(max) -> 2
@@ -115,7 +110,6 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
         else -> 1
     }
 }
-
 
 /**
  * Средняя
