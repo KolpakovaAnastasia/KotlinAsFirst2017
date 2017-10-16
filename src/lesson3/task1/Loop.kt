@@ -229,8 +229,8 @@ fun squareSequenceDigit(n: Int): Int {
  * Например, 2-я цифра равна 1, 9-я 2, 14-я 5.
  */
 fun fibSequenceDigit(n: Int): Int {
-    var k = 1
     var count = 1
+    var k = 1
     var element1 = 0
     var element2 = 1
     while (n > count) {
