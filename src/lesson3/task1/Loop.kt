@@ -65,7 +65,9 @@ fun digitCountInNumber(n: Int, m: Int): Int =
  */
 
 fun digitNumber(n: Int): Int {
-    if (n == 0) { return 1 }  else {
+    if (n == 0) {
+        return 1
+    } else {
         var a = 0
         var s = Math.abs(n)
         while (s > 0) {
@@ -75,7 +77,6 @@ fun digitNumber(n: Int): Int {
         return a
     }
 }
-
 /**
  * Простая
  *
@@ -83,7 +84,7 @@ fun digitNumber(n: Int): Int {
  * Ряд Фибоначчи определён следующим образом: fib(1) = 1, fib(2) = 1, fib(n+2) = fib(n) + fib(n+1)
  */
 fun fib(n: Int): Int {
-    if ((n == 1) || (n == 2)) return 1
+    if (n == 1 || n == 2) return 1
     else return fib(n - 1) + fib(n - 2)
 }
 
@@ -101,8 +102,7 @@ fun lcm(m: Int, n: Int): Int {
         if (a > b) a -= b
         else b -= a
     }
-    var c = a
-    return m * n / c
+    return m * n / a
 }
 
 /**
@@ -111,10 +111,8 @@ fun lcm(m: Int, n: Int): Int {
  * Для заданного числа n > 1 найти минимальный делитель, превышающий 1
  */
 fun minDivisor(n: Int): Int {
-    var i: Int
-    var k = n
-    for (i in n downTo 2)
-        if (n % i == 0) k = i
+    var k = 2
+    while (n % k != 0) k++
     return k
 }
 
@@ -124,10 +122,8 @@ fun minDivisor(n: Int): Int {
  * Для заданного числа n > 1 найти максимальный делитель, меньший n
  */
 fun maxDivisor(n: Int): Int {
-    var i: Int
-    var k = 1
-    for (i in 1..n - 1)
-        if (n % i == 0) k = i
+    var k = n - 1
+    while (n % k != 0) k--
     return k
 }
 
@@ -148,15 +144,6 @@ fun isCoPrime(m: Int, n: Int): Boolean = TODO()
  * Например, для интервала 21..28 21 <= 5*5 <= 28, а для интервала 51..61 квадрата не существует.
  */
 fun squareBetweenExists(m: Int, n: Int): Boolean = TODO()
-/* {
-    var i: Int = 1
-    var x: Double = 1.0
-    var u: Int = 0
-    for (i in m..n)  {
-        x = i * 1.0
-        if (Math.sqrt(x) / 1.0 == Math.sqrt(x)) u = 1 }
-    return (u==1)
-} */
 
 /**
  * Средняя
@@ -166,20 +153,6 @@ fun squareBetweenExists(m: Int, n: Int): Boolean = TODO()
  * Нужную точность считать достигнутой, если очередной член ряда меньше eps по модулю
  */
 fun sin(x: Double, eps: Double): Double = TODO()
-/*{
-    var sinx = x
-    var k = 1.0
-    var i = 1.0
-    var f = 1.0
-    while (Math.abs(sinx + k *(-1.0) * Math.pow(x,i+2.0) / (f * (f + 1.0) * (f + 2.0))) >= eps) {
-        k *= -1.0
-        i += 2.0
-        f *= (f + 1.0) * (f + 2.0)
-        sinx += k * Math.pow(x,i)/f
-    }
-    return sinx
-}
-*/
 
 /**
  * Средняя
@@ -199,11 +172,10 @@ fun cos(x: Double, eps: Double): Double = TODO()
 fun revert(n: Int): Int {
     var n1 = n
     var n2 = 0
-    var d2: Int
     while (n1 > 0) {
-        d2 = n1 % 10
+        val d2 = n1 % 10
         n2 = n2 * 10 + d2
-            n1 /= 10
+        n1 /= 10
     }
     return n2
 }
@@ -223,15 +195,12 @@ fun isPalindrome(n: Int): Boolean = (revert(n) == n)
  * Например, 54 и 323 состоят из разных цифр, а 111 и 0 из одинаковых.
  */
 fun hasDifferentDigits(n: Int): Boolean {
-    var l = 0
     var n1 = n
-    while (n1 > 10) {
-        if (n1 % 10 != n1 % 100 / 10) {
-            l++
-        }
+    while (n1 > 9) {
+        if (n1 % 10 != n1 % 100 / 10) return true
         n1 /= 10
     }
-    return l != 0
+    return false
 }
 /**
  * Сложная
@@ -242,24 +211,15 @@ fun hasDifferentDigits(n: Int): Boolean {
  */
 fun squareSequenceDigit(n: Int): Int {
     var k = 0
-    var c = 0
+    var count = 0
     var i = 1
-    while (n > c) {
+    while (n > count) {
         k = i * i
-        while (k > 0) {
-            k /= 10
-            c++
-        }
+        count += digitNumber(k)
         k = i * i
         i++
     }
-    val m = c - n
-    if (c > n) {
-        for (j in 1..m) {
-            k /= 10
-        }
-    }
-    return k % 10
+    return search(count, n, k)
 }
 
 /**
@@ -270,30 +230,29 @@ fun squareSequenceDigit(n: Int): Int {
  * Например, 2-я цифра равна 1, 9-я 2, 14-я 5.
  */
 fun fibSequenceDigit(n: Int): Int {
-    n == 1
-    var k = 0
-    var c = 1
-    var d = 0
-    var d1 = 1
-    var d2 = 0
-    if (n == 1) k = 1
-    while (n > c) {
-        k = d + d1
-        while (k > 0) {
-            k /= 10
-            c++
-        }
-        k = d + d1
-        d2 = d
-        d = d1
-        d1 = d2 + d
+    var k = 1
+    var count = 1
+    var element1 = 0
+    var element2 = 1
+    while (n > count) {
+        k = element1 + element2
+        count += digitNumber(k)
+        k = element1 + element2
+        val element = element1
+        element1 = element2
+        element2 = element + element1
     }
-    val m = c - n
-    if (c > n) {
-        for (j in 1..m) {
-            k /= 10
+    return search(count, n, k)
+}
+
+fun search(count: Int, n: Int, k: Int): Int {
+    var number = k
+    val c = count - n
+    if (count > n) {
+        for (j in 1..c) {
+            number /= 10
         }
     }
-    return k % 10
+    return number % 10
 }
 
