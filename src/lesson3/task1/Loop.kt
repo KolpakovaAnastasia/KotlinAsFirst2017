@@ -84,8 +84,16 @@ fun digitNumber(n: Int): Int {
  * Ряд Фибоначчи определён следующим образом: fib(1) = 1, fib(2) = 1, fib(n+2) = fib(n) + fib(n+1)
  */
 fun fib(n: Int): Int {
-    if (n == 1 || n == 2) return 1
-    else return fib(n - 1) + fib(n - 2)
+    var k = 1
+    var d = 0
+    var d1 = 1
+    for (i in 2..n) {
+        k = d + d1
+        val d2 = d
+        d = d1
+        d1 = d2 + d
+    }
+    return k
 }
 
 /**
@@ -215,7 +223,6 @@ fun squareSequenceDigit(n: Int): Int {
     while (n > count) {
         k = i * i
         count += digitNumber(k)
-        k = i * i
         i++
     }
     return search(count, n, k)
@@ -230,28 +237,25 @@ fun squareSequenceDigit(n: Int): Int {
  */
 fun fibSequenceDigit(n: Int): Int {
     var count = 1
-    var k = 1
+    var fib = 1
     var element1 = 0
     var element2 = 1
     while (n > count) {
-        k = element1 + element2
-        count += digitNumber(k)
-        k = element1 + element2
+        fib = element1 + element2
+        count += digitNumber(fib)
         val element = element1
         element1 = element2
         element2 = element + element1
     }
-    return search(count, n, k)
+    return search(count, n, fib)
 }
 
 fun search(count: Int, n: Int, k: Int): Int {
     var number = k
     val c = count - n
-    if (count > n) {
         for (j in 1..c) {
             number /= 10
         }
-    }
     return number % 10
 }
 

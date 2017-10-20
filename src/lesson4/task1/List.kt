@@ -173,10 +173,10 @@ fun times(a: List<Double>, b: List<Double>): Double {
  */
 fun polynom(p: List<Double>, x: Double): Double {
     var m = 0.0
-    var x1 = 1.0
+    var degree = 1.0
     for (i in 0 until p.size) {
-        m += p[i] * x1
-        x1 *= x
+        m += p[i] * degree
+        degree *= x
     }
     return m
 }
@@ -192,10 +192,8 @@ fun polynom(p: List<Double>, x: Double): Double {
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
 fun accumulate(list: MutableList<Double>): MutableList<Double> {
-    var m = 0.0
-    for (i in 0 until list.size) {
-        list[i] += m
-        m = list[i]
+    for (i in 1 until list.size) {
+        list[i] += list[i - 1]
     }
     return list
 }
@@ -212,14 +210,13 @@ fun factorize(n: Int): List<Int> {
     var n1 = n
     var i = 2
     while (n1 > 1) {
-        if (n1 % i == 0) {
+        while (n1 % i == 0) {
             res.add(i)
             n1 /= i
-            i = 1
         }
         i++
     }
-    return res.sorted()
+    return res
 }
 
 /**
@@ -271,14 +268,14 @@ fun convertToString(n: Int, base: Int): String = TODO()
  * Например: digits = (1, 3, 12), base = 14 -> 250
  */
 fun decimal(digits: List<Int>, base: Int): Int {
-    var m = 0.0
+    var m = 0
     val list = digits.reversed()
     var bas = 1
     for (i in 0 until list.size) {
         m += list[i] * bas
         bas *= base
     }
-    return m.toInt()
+    return m
 }
 
 /**
@@ -304,10 +301,10 @@ fun roman(n: Int): String {
     var n1 = n
     val rnum = listOf("M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I")
     val res = mutableListOf<String>()
-    val int = listOf(1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1)
-    for (i in 0 until int.size) {
-        while (n1 >= int[i]) {
-            n1 -= int[i]
+    val num = listOf(1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1)
+    for (i in 0 until num.size) {
+        while (n1 >= num[i]) {
+            n1 -= num[i]
             res.add(rnum[i])
         }
         if (n1 == 0) break
@@ -325,10 +322,10 @@ fun roman(n: Int): String {
 fun russian(n: Int): String {
     val hundreds = listOf("сто", "двести", "триста", "четыреста", "пятьсот", "шестьсот", "семьсот", "восемьсот", "девятьсот")
     val tens = listOf("десять", "двадцать", "тридцать", "сорок", "пятьдесят", "шестьдесят", "семьдесят", "восемьдесят", "девяносто")
-    val tenOnes = listOf("одиннадцать", "двенадцать", "тринадцать", "четырнадцать", "пятнадцать", "шестнадцать", "семнадцать", "восемнадцать", "девятнадцать")
+    val teens = listOf("одиннадцать", "двенадцать", "тринадцать", "четырнадцать", "пятнадцать", "шестнадцать", "семнадцать", "восемнадцать", "девятнадцать")
     val thousands = listOf("одна тысяча", "две тысячи", "три тысячи", "четыре тысячи")
-    val one1 = listOf("один", "два", "три", "четыре")
-    val one2 = listOf("пять", "шесть", "семь", "восемь", "девять")
+    val oneToFour = listOf("один", "два", "три", "четыре")
+    val fiveToNine = listOf("пять", "шесть", "семь", "восемь", "девять")
     val str = mutableListOf<String>()
     val n1 = mutableListOf<Int>()
     var n2 = n
@@ -340,22 +337,22 @@ fun russian(n: Int): String {
     n1.add(n % 100)
     if (n1[5] != 0) str.add(hundreds[n1[5] - 1])
     when {
-        n1[6] in 11..19 -> str.add(tenOnes[n1[6] - 11])
+        n1[6] in 11..19 -> str.add(teens[n1[6] - 11])
         else -> {
             if (n1[4] != 0) str.add(tens[n1[4] - 1])
             when {
-                n1[3] != 0 -> if (n1[3] < 5) str.add(thousands[n1[3] - 1]) else str.add(one2[n1[3] - 5])
+                n1[3] != 0 -> if (n1[3] < 5) str.add(thousands[n1[3] - 1]) else str.add(fiveToNine[n1[3] - 5])
             }
         }
     }
     if ((n1[3] == 0 || n1[3] > 4 || n1[6] in 11..19) && n > 1000) str.add("тысяч")
     if (n1[2] != 0) str.add(hundreds[n1[2] - 1])
     when {
-        n1[7] in 11..19 -> str.add(tenOnes[n1[7] - 11])
+        n1[7] in 11..19 -> str.add(teens[n1[7] - 11])
         else -> {
             if (n1[1] != 0) str.add(tens[n1[1] - 1])
             when {
-                n1[0] != 0 -> if (n1[0] < 5) str.add(one1[n1[0] - 1]) else str.add(one2[n1[0] - 5])
+                n1[0] != 0 -> if (n1[0] < 5) str.add(oneToFour[n1[0] - 1]) else str.add(fiveToNine[n1[0] - 5])
             }
         }
     }
