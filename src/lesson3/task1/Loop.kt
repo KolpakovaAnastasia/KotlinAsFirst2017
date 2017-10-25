@@ -251,11 +251,8 @@ fun fibSequenceDigit(n: Int): Int {
 }
 
 fun search(count: Int, n: Int, k: Int): Int {
-    var number = k
+    var number = k * 1.0
     val c = count - n
-        for (j in 1..c) {
-            number /= 10
-        }
-    return number % 10
+    number = number / pow(10.0, c.toDouble()) % 10
+    return number.toInt()
 }
-
