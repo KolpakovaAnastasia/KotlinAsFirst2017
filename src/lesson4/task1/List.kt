@@ -320,41 +320,50 @@ fun roman(n: Int): String {
  * 23964 = "двадцать три тысячи девятьсот шестьдесят четыре"
  */
 fun russian(n: Int): String {
+    var res = listOf<String>()
+    if (n > 999)
+        res += strNum(n / 1000, 2)
+    res += strNum(n % 1000, 1)
+    return res.joinToString(" ")
+}
     val hundreds = listOf("сто", "двести", "триста", "четыреста", "пятьсот", "шестьсот", "семьсот", "восемьсот", "девятьсот")
-    val tens = listOf("десять", "двадцать", "тридцать", "сорок", "пятьдесят", "шестьдесят", "семьдесят", "восемьдесят", "девяносто")
-    val teens = listOf("одиннадцать", "двенадцать", "тринадцать", "четырнадцать", "пятнадцать", "шестнадцать", "семнадцать", "восемнадцать", "девятнадцать")
-    val thousands = listOf("одна тысяча", "две тысячи", "три тысячи", "четыре тысячи")
-    val oneToFour = listOf("один", "два", "три", "четыре")
-    val fiveToNine = listOf("пять", "шесть", "семь", "восемь", "девять")
-    val str = mutableListOf<String>()
-    val n1 = mutableListOf<Int>()
-    var n2 = n
-    for (i in 0..5) {
-        n1.add(n2 % 10)
-        n2 /= 10
+val tens = listOf("двадцать", "тридцать", "сорок", "пятьдесят", "шестьдесят", "семьдесят", "восемьдесят", "девяносто")
+val teens = listOf("десять", "одиннадцать", "двенадцать", "тринадцать", "четырнадцать", "пятнадцать", "шестнадцать", "семнадцать", "восемнадцать", "девятнадцать")
+val threeToNine = listOf("три", "четыре", "пять", "шесть", "семь", "восемь", "девять")
+val oneTwo = listOf("один", "два")
+val oneTwo2 = listOf("одна", "две")
+
+fun strNum(digit: Int, part: Int): MutableList<String> {
+    val res = mutableListOf<String>()
+    val num1 = digit % 10
+    val num2 = digit / 10 % 10
+    val num3 = digit / 100
+    val duoNum = digit % 100
+    if (num3 > 0)
+        res.add(hundreds[num3 - 1])
+    if (num2 > 1)
+        res.add(tens[num2 - 2])
+    if (duoNum in 10..19) {
+        res.add(teens[num1])
+        if (part == 2)
+            res.add("тысяч")
+        return res
     }
-    n1.add(n / 1000 % 100)
-    n1.add(n % 100)
-    if (n1[5] != 0) str.add(hundreds[n1[5] - 1])
-    when {
-        n1[6] in 11..19 -> str.add(teens[n1[6] - 11])
-        else -> {
-            if (n1[4] != 0) str.add(tens[n1[4] - 1])
-            when {
-                n1[3] != 0 -> if (n1[3] < 5) str.add(thousands[n1[3] - 1]) else str.add(fiveToNine[n1[3] - 5])
+    if (num1 > 2)
+        res.add(threeToNine[num1 - 3])
+    else
+        if (num1 != 0)
+            when (part) {
+                1 -> res.add(oneTwo[num1 - 1])
+                2 -> res.add(oneTwo2[num1 - 1])
             }
+    if (part == 2)
+        when {
+            res.last() == "одна" -> res.add("тысяча")
+            res.last() == "две" -> res.add("тысячи")
+            res.last() == "три" -> res.add("тысячи")
+            res.last() == "четыре" -> res.add("тысячи")
+            else -> res.add("тысяч")
         }
-    }
-    if ((n1[3] == 0 || n1[3] > 4 || n1[6] in 11..19) && n > 1000) str.add("тысяч")
-    if (n1[2] != 0) str.add(hundreds[n1[2] - 1])
-    when {
-        n1[7] in 11..19 -> str.add(teens[n1[7] - 11])
-        else -> {
-            if (n1[1] != 0) str.add(tens[n1[1] - 1])
-            when {
-                n1[0] != 0 -> if (n1[0] < 5) str.add(oneToFour[n1[0] - 1]) else str.add(fiveToNine[n1[0] - 5])
-            }
-        }
-    }
-    return str.joinToString(separator = " ")
+    return res
 }
