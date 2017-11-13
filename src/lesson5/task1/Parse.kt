@@ -66,26 +66,25 @@ fun main(args: Array<String>) {
  * День и месяц всегда представлять двумя цифрами, например: 03.04.2011.
  * При неверном формате входной строки вернуть пустую строку
  */
-private val date =
-        Regex("^\\d{1,2} [а-я]{3,} \\d+$")
-
 fun dateStrToDigit(str: String): String {
+    val date = Regex("^\\d{1,2} [а-я]{3,} \\d+$")
     if (!(str matches date)) return ""
     var (days, month, year) = str.split(" ")
-    month = when (month) {
-        "декабря" -> "12"
-        "января" -> "01"
-        "февраля" -> "02"
-        "марта" -> "03"
-        "апреля" -> "04"
-        "мая" -> "05"
-        "июня" -> "06"
-        "июля" -> "07"
-        "августа" -> "08"
-        "сентября" -> "09"
-        "октября" -> "10"
-        "ноября" -> "11"
-        else -> return ""
+    month =
+            when (month) {
+                "декабря" -> "12"
+                "января" -> "01"
+                "февраля" -> "02"
+                "марта" -> "03"
+                "апреля" -> "04"
+                "мая" -> "05"
+                "июня" -> "06"
+                "июля" -> "07"
+                "августа" -> "08"
+                "сентября" -> "09"
+                "октября" -> "10"
+                "ноября" -> "11"
+                else -> return ""
     }
     return String.format("%02d.%02d.%d", days.toInt(), month.toInt(), year.toInt())
 }
@@ -98,10 +97,9 @@ fun dateStrToDigit(str: String): String {
  * При неверном формате входной строки вернуть пустую строку
  */
 fun dateDigitToStr(digital: String): String {
-    val check = Regex("^\\d{2}\\.\\d{2}\\.\\d+$")
+    val dateStr = Regex("^\\d{2}\\.\\d{2}\\.\\d+$")
     val date = digital.split(".")
-
-    if (digital matches check) {
+    if (digital matches dateStr) {
         val day = date[0].toInt()
         val month = when (date[1]) {
             "01" -> "января"
@@ -134,18 +132,15 @@ fun dateDigitToStr(digital: String): String {
  * Все символы в номере, кроме цифр, пробелов и +-(), считать недопустимыми.
  * При неверном формате вернуть пустую строку
  */
-private val number = Regex("\\d+")
-private val strReplace = Regex("[ ()+-]")
-
 fun flattenPhoneNumber(phone: String): String {
-    val str = phone.replace(strReplace, "")
-
-    if (str matches number)
+    val num = Regex("\\d+")
+    val Replace = Regex("[ ()+-]")
+    val str = phone.replace(Replace, "")
+    if (str matches num)
         return if (phone.first() == '+') "+" + str
         else str
     return ""
 }
-
 /**
  * Средняя
  *
@@ -159,7 +154,9 @@ fun flattenPhoneNumber(phone: String): String {
 fun bestLongJump(jumps: String): Int {
     var max = -1
     if (Regex("""[^ %\-\d]""").findAll(jumps).count() > 0) return max
-    Regex("""\d+""").findAll(jumps).forEach { max = Math.max(max, it.value.toInt()) }
+    Regex("""\d+""").findAll(jumps).forEach {
+        max = Math.max(max, it.value.toInt())
+    }
     return max
 }
 
@@ -178,7 +175,6 @@ fun bestHighJump(jumps: String): Int {
     var max = -1
     for (i in 0 until clearList.size - 1)
         if (clearList[i + 1] == "+" && clearList[i].toInt() > max) max = clearList[i].toInt()
-
     return max
 }
 
@@ -194,12 +190,12 @@ fun bestHighJump(jumps: String): Int {
 fun plusMinus(expression: String): Int {
     require(expression matches Regex("""\d+( [+-] \d+)*"""))
     val parts = expression.split(" ")
-    var result = parts[0].toInt()
+    var res = parts[0].toInt()
     for (i in 1 until parts.size) {
-        if ("+" == parts[i]) result += parts[i + 1].toInt()
-        if ("-" == parts[i]) result -= parts[i + 1].toInt()
+        if ("+" == parts[i]) res += parts[i + 1].toInt()
+        if ("-" == parts[i]) res -= parts[i + 1].toInt()
     }
-    return result
+    return res
 }
 
 /**
@@ -214,7 +210,6 @@ fun plusMinus(expression: String): Int {
 fun firstDuplicateIndex(str: String): Int {
     val words = str.split(" ")
     var result = 0
-
     for (i in 1 until words.size) {
         if (words[i - 1].toLowerCase() == words[i].toLowerCase())
             return result
@@ -234,23 +229,20 @@ fun firstDuplicateIndex(str: String): Int {
  * или пустую строку при нарушении формата строки.
  * Все цены должны быть положительными
  */
-val costRegex = Regex("\\d+(\\.\\d+)?")
-
 fun mostExpensive(description: String): String {
+    val costRegex = Regex("\\d+(\\.\\d+)?")
     var max = 0.0
-    var maxNum = 1
-    val str = description.split(" ", ";") //replace(";", "").
-
+    var maxNumber = 1
+    val str = description.split(" ", ";")
     for (i in 1 until str.size step 3) {
         if (!(str[i] matches costRegex)) return ""
         if (str[i].toDouble() > max) {
             max = str[i].toDouble()
-            maxNum = i
+            maxNumber = i
         }
     }
-    return str[maxNum - 1]
+    return str[maxNumber - 1]
 }
-
 /**
  * Сложная
  *
