@@ -292,7 +292,7 @@ fun fromRoman(roman: String): Int = TODO()
  * IllegalArgumentException должен бросаться даже если ошибочная команда не была достигнута в ходе выполнения.
  *
  */
-fun index(str: String): MutableList<Pair<Int, Int>> { //Хотел было сделать регуляркой, но пока руки не дошли
+fun index(str: String): MutableList<Pair<Int, Int>> {
     val answer = mutableListOf<Pair<Int, Int>>()
     var brackets = 0
     for (i in 0 until str.length) {
