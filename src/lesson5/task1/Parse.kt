@@ -292,4 +292,54 @@ fun fromRoman(roman: String): Int = TODO()
  * IllegalArgumentException должен бросаться даже если ошибочная команда не была достигнута в ходе выполнения.
  *
  */
-fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> = TODO()
+fun index(str: String): MutableList<Pair<Int, Int>> { //Хотел было сделать регуляркой, но пока руки не дошли
+    val answer = mutableListOf<Pair<Int, Int>>()
+    var brackets = 0
+    for (i in 0 until str.length) {
+        if (str[i] == '[') {
+            brackets++
+            var temp = i + 1
+            while (brackets > 0 && temp < str.length) {
+                if (str[temp] == '[') brackets++
+                if (str[temp] == ']') brackets--
+                temp++
+            }
+            answer.add(Pair(i, temp - 1))
+        }
+    }
+
+    return answer
+}
+
+fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
+    val answerList = MutableList(cells, { 0 })
+    val brackets = index(commands)
+    var sensor = cells / 2
+    var command = 0
+    var limCommand = 0
+    if (commands.isEmpty()) return answerList
+    if (!commands.matches(Regex("""[\[><+\-\] ]+""")) || commands.count { it == '[' } != commands.count { it == ']' }) {
+        throw IllegalArgumentException("Invalid command")
+    }
+    while (limCommand < limit && command < commands.length) {
+        try {
+            when (commands[command]) {
+                '+' -> answerList[sensor]++
+                '-' -> answerList[sensor]--
+                '>' -> sensor++
+                '<' -> sensor--
+                '[' -> if (answerList[sensor] == 0) {
+                    command = brackets.find { it.first == command }?.second!!
+                }
+                ']' -> if (answerList[sensor] != 0) {
+                    command = brackets.find { it.second == command }?.first!!
+                }
+            }
+        } catch (e: ArrayIndexOutOfBoundsException) {
+            throw IllegalArgumentException("Exit the conveyor.")
+        }
+        limCommand++
+        command++
+    }
+    return answerList
+}
