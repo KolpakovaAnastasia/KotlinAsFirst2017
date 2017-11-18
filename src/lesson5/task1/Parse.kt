@@ -69,24 +69,23 @@ fun main(args: Array<String>) {
 fun dateStrToDigit(str: String): String {
     val date = Regex("^\\d{1,2} [а-я]{3,} \\d+$")
     if (!(str matches date)) return ""
-    var (days, month, year) = str.split(" ")
-    month =
-            when (month) {
-                "декабря" -> "12"
-                "января" -> "01"
-                "февраля" -> "02"
-                "марта" -> "03"
-                "апреля" -> "04"
-                "мая" -> "05"
-                "июня" -> "06"
-                "июля" -> "07"
-                "августа" -> "08"
-                "сентября" -> "09"
-                "октября" -> "10"
-                "ноября" -> "11"
-                else -> return ""
+    val (days, monthStr, year) = str.split(" ")
+    val month = when (monthStr) {
+        "января" -> 1
+        "февраля" -> 2
+        "марта" -> 3
+        "апреля" -> 4
+        "мая" -> 5
+        "июня" -> 6
+        "июля" -> 7
+        "августа" -> 8
+        "сентября" -> 9
+        "октября" -> 10
+        "ноября" -> 11
+        "декабря" -> 12
+        else -> return ""
     }
-    return String.format("%02d.%02d.%d", days.toInt(), month.toInt(), year.toInt())
+    return String.format("%02d.%02d.%d", days.toInt(), month, year.toInt())
 }
 
 /**
@@ -97,25 +96,25 @@ fun dateStrToDigit(str: String): String {
  * При неверном формате входной строки вернуть пустую строку
  */
 fun dateDigitToStr(digital: String): String {
-    val dateStr = Regex("^\\d{2}\\.\\d{2}\\.\\d+$")
+    val dateStr = Regex("^\\d{2}\\.\\d{2}\\.\\d+\$")
     val date = digital.split(".")
+    val month = when (date[1]) {
+        "01" -> "января"
+        "02" -> "февраля"
+        "03" -> "марта"
+        "04" -> "апреля"
+        "05" -> "мая"
+        "06" -> "июня"
+        "07" -> "июля"
+        "08" -> "августа"
+        "09" -> "сентября"
+        "10" -> "октября"
+        "11" -> "ноября"
+        "12" -> "декабря"
+        else -> return ""
+    }
     if (digital matches dateStr) {
         val day = date[0].toInt()
-        val month = when (date[1]) {
-            "01" -> "января"
-            "02" -> "февраля"
-            "03" -> "марта"
-            "04" -> "апреля"
-            "05" -> "мая"
-            "06" -> "июня"
-            "07" -> "июля"
-            "08" -> "августа"
-            "09" -> "сентября"
-            "10" -> "октября"
-            "11" -> "ноября"
-            "12" -> "декабря"
-            else -> return ""
-        }
         val year = date[2].toInt()
         return "$day $month $year"
     } else return ""
@@ -153,10 +152,11 @@ fun flattenPhoneNumber(phone: String): String {
  */
 fun bestLongJump(jumps: String): Int {
     var max = -1
-    if (Regex("""[^ %\-\d]""").findAll(jumps).count() > 0) return max
-    Regex("""\d+""").findAll(jumps).forEach {
-        max = Math.max(max, it.value.toInt())
-    }
+    val number = Regex("\\d+")
+    val str = jumps.split(" ", "-", "%")
+    if (!(str.joinToString("") matches number)) return max
+    for (part in str)
+        if (part != "" && part.toInt() > max) max = part.toInt()
     return max
 }
 
@@ -171,11 +171,16 @@ fun bestLongJump(jumps: String): Int {
  * При нарушении формата входной строки вернуть -1.
  */
 fun bestHighJump(jumps: String): Int {
-    val clearList = jumps.split(" ", "-", "%").filter { it.isNotEmpty() }
     var max = -1
-    for (i in 0 until clearList.size - 1)
-        if (clearList[i + 1] == "+" && clearList[i].toInt() > max) max = clearList[i].toInt()
-    return max
+    return try {
+        Regex("""\d+ [%]?[%]?[+]""").findAll(jumps).forEach {
+            Regex("""\d+""").findAll(it.value).
+                    forEach { max = Math.max(max, it.value.toInt()) }
+        }
+        max
+    } catch (e: NumberFormatException) {
+        max
+    }
 }
 
 /**
@@ -188,16 +193,17 @@ fun bestHighJump(jumps: String): Int {
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
  */
 fun plusMinus(expression: String): Int {
-    require(expression matches Regex("""\d+( [+-] \d+)*"""))
     val parts = expression.split(" ")
     var res = parts[0].toInt()
-    for (i in 1 until parts.size) {
-        if ("+" == parts[i]) res += parts[i + 1].toInt()
-        if ("-" == parts[i]) res -= parts[i + 1].toInt()
-    }
-    return res
+    if (expression matches Regex("\\d+( [+-] \\d+)*")) {
+        for (i in 1 until parts.size) {
+            if ("+" == parts[i]) res += parts[i + 1].toInt()
+            if ("-" == parts[i]) res -= parts[i + 1].toInt()
+        }
+        return res
+    } else
+        throw IllegalArgumentException()
 }
-
 /**
  * Сложная
  *
@@ -230,18 +236,22 @@ fun firstDuplicateIndex(str: String): Int {
  * Все цены должны быть положительными
  */
 fun mostExpensive(description: String): String {
-    val costRegex = Regex("\\d+(\\.\\d+)?")
-    var max = 0.0
-    var maxNumber = 1
-    val str = description.split(" ", ";")
-    for (i in 1 until str.size step 3) {
-        if (!(str[i] matches costRegex)) return ""
-        if (str[i].toDouble() > max) {
-            max = str[i].toDouble()
-            maxNumber = i
+    var res = ""
+    var max = -1.0
+    val str = description.split(" ", "; ")
+    if (description == "") return ""
+    return try {
+        for (i in 0 until str.size step 2) {
+            val s1 = str[i + 1].toDouble()
+            if (s1 > max) {
+                max = s1
+                res = str[i]
+            }
         }
+        res
+    } catch (e: NumberFormatException) {
+        ""
     }
-    return str[maxNumber - 1]
 }
 /**
  * Сложная
@@ -292,54 +302,5 @@ fun fromRoman(roman: String): Int = TODO()
  * IllegalArgumentException должен бросаться даже если ошибочная команда не была достигнута в ходе выполнения.
  *
  */
-fun index(str: String): MutableList<Pair<Int, Int>> {
-    val answer = mutableListOf<Pair<Int, Int>>()
-    var brackets = 0
-    for (i in 0 until str.length) {
-        if (str[i] == '[') {
-            brackets++
-            var temp = i + 1
-            while (brackets > 0 && temp < str.length) {
-                if (str[temp] == '[') brackets++
-                if (str[temp] == ']') brackets--
-                temp++
-            }
-            answer.add(Pair(i, temp - 1))
-        }
-    }
 
-    return answer
-}
-
-fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
-    val answerList = MutableList(cells, { 0 })
-    val brackets = index(commands)
-    var sensor = cells / 2
-    var command = 0
-    var limCommand = 0
-    if (commands.isEmpty()) return answerList
-    if (!commands.matches(Regex("""[\[><+\-\] ]+""")) || commands.count { it == '[' } != commands.count { it == ']' }) {
-        throw IllegalArgumentException("Invalid command")
-    }
-    while (limCommand < limit && command < commands.length) {
-        try {
-            when (commands[command]) {
-                '+' -> answerList[sensor]++
-                '-' -> answerList[sensor]--
-                '>' -> sensor++
-                '<' -> sensor--
-                '[' -> if (answerList[sensor] == 0) {
-                    command = brackets.find { it.first == command }?.second!!
-                }
-                ']' -> if (answerList[sensor] != 0) {
-                    command = brackets.find { it.second == command }?.first!!
-                }
-            }
-        } catch (e: ArrayIndexOutOfBoundsException) {
-            throw IllegalArgumentException("Exit the conveyor.")
-        }
-        limCommand++
-        command++
-    }
-    return answerList
-}
+fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> = TODO()
