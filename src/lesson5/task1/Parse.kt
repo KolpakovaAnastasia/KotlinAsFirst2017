@@ -98,22 +98,22 @@ fun dateStrToDigit(str: String): String {
 fun dateDigitToStr(digital: String): String {
     val dateStr = Regex("^\\d{2}\\.\\d{2}\\.\\d+\$")
     val date = digital.split(".")
-    val month = when (date[1]) {
-        "01" -> "января"
-        "02" -> "февраля"
-        "03" -> "марта"
-        "04" -> "апреля"
-        "05" -> "мая"
-        "06" -> "июня"
-        "07" -> "июля"
-        "08" -> "августа"
-        "09" -> "сентября"
-        "10" -> "октября"
-        "11" -> "ноября"
-        "12" -> "декабря"
-        else -> return ""
-    }
     if (digital matches dateStr) {
+        val month = when (date[1]) {
+            "01" -> "января"
+            "02" -> "февраля"
+            "03" -> "марта"
+            "04" -> "апреля"
+            "05" -> "мая"
+            "06" -> "июня"
+            "07" -> "июля"
+            "08" -> "августа"
+            "09" -> "сентября"
+            "10" -> "октября"
+            "11" -> "ноября"
+            "12" -> "декабря"
+            else -> return ""
+        }
         val day = date[0].toInt()
         val year = date[2].toInt()
         return "$day $month $year"
@@ -193,10 +193,10 @@ fun bestHighJump(jumps: String): Int {
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
  */
 fun plusMinus(expression: String): Int {
-    val parts = expression.split(" ")
-    var res = parts[0].toInt()
     if (expression matches Regex("\\d+( [+-] \\d+)*")) {
-        for (i in 1 until parts.size) {
+        val parts = expression.split(" ")
+        var res = parts[0].toInt()
+        for (i in 1 until parts.size step 2) {
             if ("+" == parts[i]) res += parts[i + 1].toInt()
             if ("-" == parts[i]) res -= parts[i + 1].toInt()
         }
