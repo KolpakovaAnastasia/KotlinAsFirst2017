@@ -179,29 +179,60 @@ class Line private constructor(val b: Double, val angle: Double) {
  *
  * Построить прямую по отрезку
  */
-fun lineBySegment(s: Segment): Line = TODO()
+fun lineBySegment(s: Segment): Line {
+    val angle: Double
+    val c = Point(s.end.x, s.begin.y)
+    angle = when {
+        s.begin.x == s.end.x -> Math.PI / 2
+        s.begin.y == s.end.y -> 0.0
+        else -> {
+            if ((s.begin.x < s.end.x) && (s.begin.y < s.end.y) || (s.begin.x > s.end.x) && (s.begin.y < s.end.y))
+                Math.asin((s.end.distance(c)) / (s.begin.distance(s.end)))
+            else Math.PI - Math.asin((s.end.distance(c)) / (s.begin.distance(s.end)))
+        }
+    }
+    return Line(s.begin, angle)
+}
 
 /**
  * Средняя
  *
  * Построить прямую по двум точкам
  */
-fun lineByPoints(a: Point, b: Point): Line = TODO()
+fun lineByPoints(a: Point, b: Point): Line = lineBySegment(Segment(a, b))
 
 /**
  * Сложная
  *
  * Построить серединный перпендикуляр по отрезку или по двум точкам
  */
-fun bisectorByPoints(a: Point, b: Point): Line = TODO()
-
+fun bisectorByPoints(a: Point, b: Point): Line {
+    val r = Point((a.x + b.x) / 2, (a.y + b.y) / 2)
+    val angle = (Math.PI / 2 + Math.atan((a.y - b.y) / (a.x - b.x))) % Math.PI
+    return Line(r, angle)
+}
 /**
  * Средняя
  *
  * Задан список из n окружностей на плоскости. Найти пару наименее удалённых из них.
  * Если в списке менее двух окружностей, бросить IllegalArgumentException
  */
-fun findNearestCirclePair(vararg circles: Circle): Pair<Circle, Circle> = TODO()
+fun findNearestCirclePair(vararg circles: Circle): Pair<Circle, Circle> {
+    var minDistance = circles[0].distance(circles[1])
+    var answer = Pair(circles[0], circles[1])
+    if (circles.size < 2) {
+        throw IllegalArgumentException("менее 2 окр")
+    }
+    for (i in 0 until circles.size) {
+        for (j in (i + 1) until circles.size) {
+            if (circles[i].distance(circles[j]) < minDistance) {
+                answer = Pair(circles[i], circles[j])
+                minDistance = circles[i].distance(circles[j])
+            }
+        }
+    }
+    return answer
+}
 
 /**
  * Сложная
@@ -212,7 +243,9 @@ fun findNearestCirclePair(vararg circles: Circle): Pair<Circle, Circle> = TODO()
  * (построить окружность по трём точкам, или
  * построить окружность, описанную вокруг треугольника - эквивалентная задача).
  */
-fun circleByThreePoints(a: Point, b: Point, c: Point): Circle = TODO()
+fun circleByThreePoints(a: Point, b: Point, c: Point): Circle =
+        Circle(bisectorByPoints(a, b).crossPoint(bisectorByPoints(b, c)), bisectorByPoints(a, b).crossPoint(bisectorByPoints(b, c)).distance(a))
+
 
 /**
  * Очень сложная
