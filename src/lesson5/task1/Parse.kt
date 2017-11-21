@@ -96,9 +96,8 @@ fun dateStrToDigit(str: String): String {
  * При неверном формате входной строки вернуть пустую строку
  */
 fun dateDigitToStr(digital: String): String {
-    val dateStr = Regex("^\\d{2}\\.\\d{2}\\.\\d+\$")
     val date = digital.split(".")
-    if (digital matches dateStr) {
+    if (date.size != 3) return ""
         val month = when (date[1]) {
             "01" -> "января"
             "02" -> "февраля"
@@ -116,8 +115,8 @@ fun dateDigitToStr(digital: String): String {
         }
         val day = date[0].toInt()
         val year = date[2].toInt()
-        return "$day $month $year"
-    } else return ""
+    return String.format("%d %s %s", day, month, year)
+
 }
 /**
  * Средняя
@@ -132,13 +131,15 @@ fun dateDigitToStr(digital: String): String {
  * При неверном формате вернуть пустую строку
  */
 fun flattenPhoneNumber(phone: String): String {
-    val num = Regex("\\d+")
-    val Replace = Regex("[ ()+-]")
-    val str = phone.replace(Replace, "")
-    if (str matches num)
-        return if (phone.first() == '+') "+" + str
-        else str
-    return ""
+    var result = ""
+    val symbols = listOf('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '+', '-', '(', ')', ' ')
+    if (phone == "") return ""
+    if (phone[0] == '+') result += "+"
+    for (i in 0 until phone.length) {
+        if (phone[i] !in symbols) return ""
+        else if (phone[i] in '0'..'9') result += phone[i]
+    }
+    return result
 }
 /**
  * Средняя
