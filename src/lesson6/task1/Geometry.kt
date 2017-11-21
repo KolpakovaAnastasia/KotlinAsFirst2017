@@ -180,18 +180,15 @@ class Line private constructor(val b: Double, val angle: Double) {
  * Построить прямую по отрезку
  */
 fun lineBySegment(s: Segment): Line {
-    val angle: Double
-    val c = Point(s.end.x, s.begin.y)
-    angle = when {
-        s.begin.x == s.end.x -> Math.PI / 2
-        s.begin.y == s.end.y -> 0.0
-        else -> {
-            if ((s.begin.x < s.end.x) && (s.begin.y < s.end.y) || (s.begin.x > s.end.x) && (s.begin.y < s.end.y))
-                Math.asin((s.end.distance(c)) / (s.begin.distance(s.end)))
-            else Math.PI - Math.asin((s.end.distance(c)) / (s.begin.distance(s.end)))
-        }
+    var angle = Math.atan2((s.end.y - s.begin.y), (s.end.x - s.begin.x))
+    if (angle < 0) {
+        angle += Math.PI
+    }
+    if (angle >= Math.PI) {
+        angle -= Math.PI
     }
     return Line(s.begin, angle)
+
 }
 
 /**
@@ -243,10 +240,10 @@ fun findNearestCirclePair(vararg circles: Circle): Pair<Circle, Circle> {
  * (построить окружность по трём точкам, или
  * построить окружность, описанную вокруг треугольника - эквивалентная задача).
  */
-fun circleByThreePoints(a: Point, b: Point, c: Point): Circle =
-        Circle(bisectorByPoints(a, b).crossPoint(bisectorByPoints(b, c)), bisectorByPoints(a, b).crossPoint(bisectorByPoints(b, c)).distance(a))
-
-
+fun circleByThreePoints(a: Point, b: Point, c: Point): Circle {
+    val center = bisectorByPoints(a, b).crossPoint(bisectorByPoints(b, c))
+    return Circle(center, center.distance(a))
+}
 /**
  * Очень сложная
  *
