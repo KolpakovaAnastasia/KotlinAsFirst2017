@@ -101,7 +101,16 @@ data class Segment(val begin: Point, val end: Point) {
  * Дано множество точек. Вернуть отрезок, соединяющий две наиболее удалённые из них.
  * Если в множестве менее двух точек, бросить IllegalArgumentException
  */
-fun diameter(vararg points: Point): Segment = TODO()
+fun diameter(vararg points: Point): Segment {
+    var max = Segment(Point(0.0, 0.0), Point(0.0, 0.0))
+    if (points.size < 2)
+        throw IllegalArgumentException("в множестве менее двух точек")
+    for (i in 0 until points.size)
+        for (j in i + 1 until points.size)
+            if (points[i].distance(points[j]) > max.begin.distance(max.end))
+                max = Segment(points[i], points[j])
+    return max
+}
 
 /**
  * Простая
@@ -109,7 +118,11 @@ fun diameter(vararg points: Point): Segment = TODO()
  * Построить окружность по её диаметру, заданному двумя точками
  * Центр её должен находиться посередине между точками, а радиус составлять половину расстояния между ними
  */
-fun circleByDiameter(diameter: Segment): Circle = TODO()
+fun circleByDiameter(diameter: Segment): Circle {
+    val center = Point((diameter.begin.x + diameter.end.x) / 2.0, (diameter.begin.y + diameter.end.y) / 2.0)
+    val radius = diameter.begin.distance(diameter.end) / 2.0
+    return Circle(center, radius)
+}
 
 /**
  * Прямая, заданная точкой point и углом наклона angle (в радианах) по отношению к оси X.
@@ -130,7 +143,25 @@ class Line private constructor(val b: Double, val angle: Double) {
      * Найти точку пересечения с другой линией.
      * Для этого необходимо составить и решить систему из двух уравнений (каждое для своей прямой)
      */
-    fun crossPoint(other: Line): Point = TODO()
+    fun crossPoint(other: Line): Point {
+        val x: Double
+        val y: Double
+        when {
+            other.angle == 0.0 -> {
+                x = (other.b * Math.cos(angle) - b) / Math.sin(angle)
+                y = other.b
+            }
+            angle == 0.0 -> {
+                x = (b * Math.cos(other.angle) - other.b) / Math.sin(other.angle)
+                y = b
+            }
+            else -> {
+                x = (other.b / Math.cos(other.angle) - b / Math.cos(angle)) / (Math.tan(angle) - Math.tan(other.angle))
+                y = (x * Math.sin(other.angle) + other.b) / Math.cos(other.angle)
+            }
+        }
+        return Point(x, y)
+    }
 
     override fun equals(other: Any?) = other is Line && angle == other.angle && b == other.b
 
