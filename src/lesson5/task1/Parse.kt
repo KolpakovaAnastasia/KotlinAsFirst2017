@@ -98,25 +98,24 @@ fun dateStrToDigit(str: String): String {
 fun dateDigitToStr(digital: String): String {
     val date = digital.split(".")
     if (date.size != 3) return ""
-        val month = when (date[1]) {
-            "01" -> "января"
-            "02" -> "февраля"
-            "03" -> "марта"
-            "04" -> "апреля"
-            "05" -> "мая"
-            "06" -> "июня"
-            "07" -> "июля"
-            "08" -> "августа"
-            "09" -> "сентября"
-            "10" -> "октября"
-            "11" -> "ноября"
-            "12" -> "декабря"
-            else -> return ""
-        }
-        val day = date[0].toInt()
-        val year = date[2].toInt()
+    val month = when (date[1]) {
+        "01" -> "января"
+        "02" -> "февраля"
+        "03" -> "марта"
+        "04" -> "апреля"
+        "05" -> "мая"
+        "06" -> "июня"
+        "07" -> "июля"
+        "08" -> "августа"
+        "09" -> "сентября"
+        "10" -> "октября"
+        "11" -> "ноября"
+        "12" -> "декабря"
+        else -> return ""
+    }
+    val day = date[0].toInt()
+    val year = date[2].toInt()
     return String.format("%d %s %s", day, month, year)
-
 }
 /**
  * Средняя
