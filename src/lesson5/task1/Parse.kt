@@ -130,15 +130,10 @@ fun dateDigitToStr(digital: String): String {
  * При неверном формате вернуть пустую строку
  */
 fun flattenPhoneNumber(phone: String): String {
-    var result = ""
-    val symbols = listOf('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '+', '-', '(', ')', ' ')
-    if (phone == "") return ""
-    if (phone[0] == '+') result += "+"
-    for (i in 0 until phone.length) {
-        if (phone[i] !in symbols) return ""
-        else if (phone[i] in '0'..'9') result += phone[i]
-    }
-    return result
+    val resList = listOf(' ', '-', ')', '(')
+    val res = phone.filter { it !in resList }
+    return if (!Regex("""^\+?\d+$""").matches(res)) ""
+    else res
 }
 /**
  * Средняя
@@ -155,11 +150,14 @@ fun bestLongJump(jumps: String): Int {
     val number = Regex("\\d+")
     val str = jumps.split(" ", "-", "%")
     if (!(str.joinToString("") matches number)) return max
-    for (part in str)
-        if (part != "" && part.toInt() > max) max = part.toInt()
+    try {
+        for (part in str)
+            if (part != "" && part.toInt() > max) max = part.toInt()
+    } catch (e: NumberFormatException) {
+        return -1
+    }
     return max
 }
-
 /**
  * Сложная
  *
@@ -196,9 +194,13 @@ fun plusMinus(expression: String): Int {
     if (expression matches Regex("\\d+( [+-] \\d+)*")) {
         val parts = expression.split(" ")
         var res = parts[0].toInt()
-        for (i in 1 until parts.size step 2) {
-            if ("+" == parts[i]) res += parts[i + 1].toInt()
-            if ("-" == parts[i]) res -= parts[i + 1].toInt()
+        try {
+            for (i in 1 until parts.size step 2) {
+                if ("+" == parts[i]) res += parts[i + 1].toInt()
+                if ("-" == parts[i]) res -= parts[i + 1].toInt()
+            }
+        } catch (e: NumberFormatException) {
+            return -1
         }
         return res
     } else
