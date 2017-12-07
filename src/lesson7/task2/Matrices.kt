@@ -1,6 +1,7 @@
 @file:Suppress("UNUSED_PARAMETER")
 package lesson7.task2
 
+import lesson7.task1.Cell
 import lesson7.task1.Matrix
 import lesson7.task1.createMatrix
 
@@ -59,7 +60,35 @@ operator fun Matrix<Int>.plus(other: Matrix<Int>): Matrix<Int> {
  * 10 11 12  5
  *  9  8  7  6
  */
-fun generateSpiral(height: Int, width: Int): Matrix<Int> = TODO()
+fun generateSpiral(height: Int, width: Int): Matrix<Int> {
+    val res = createMatrix(height, width, 0)
+    var curs = Cell(0, 0)
+    res[curs] = 1
+    var j = 1
+    for (i in 0..(minOf(height, width) / 2) + 1) {
+        while (curs.column + 2 <= width && res[Cell(curs.row, curs.column + 1)] == 0) {
+            j++
+            curs = Cell(curs.row, curs.column + 1)
+            res[curs] = j
+        }
+        while (curs.row + 2 <= height && res[Cell(curs.row + 1, curs.column)] == 0) {
+            j++
+            curs = Cell(curs.row + 1, curs.column)
+            res[curs] = j
+        }
+        while (curs.column >= 1 && res[Cell(curs.row, curs.column - 1)] == 0) {
+            j++
+            curs = Cell(curs.row, curs.column - 1)
+            res[curs] = j
+        }
+        while (curs.row >= 1 && res[Cell(curs.row - 1, curs.column)] == 0) {
+            j++
+            curs = Cell(curs.row - 1, curs.column)
+            res[curs] = j
+        }
+    }
+    return res
+}
 
 /**
  * Сложная
@@ -103,7 +132,14 @@ fun generateSnake(height: Int, width: Int): Matrix<Int> = TODO()
  * 4 5 6      8 5 2
  * 7 8 9      9 6 3
  */
-fun <E> rotate(matrix: Matrix<E>): Matrix<E> = TODO()
+fun <E> rotate(matrix: Matrix<E>): Matrix<E> {
+    if (matrix.height != matrix.width) throw IllegalArgumentException("матрица не квадратная")
+    val matrix2 = createMatrix(matrix.height, matrix.width, matrix[0, 0])
+    for (i in 0 until matrix.height)
+        for (j in 0 until matrix.height)
+            matrix2[i, j] = matrix[matrix.height - 1 - j, i]
+    return matrix2
+}
 
 /**
  * Сложная

@@ -38,32 +38,56 @@ interface Matrix<E> {
  * height = высота, width = ширина, e = чем заполнить элементы.
  * Бросить исключение IllegalArgumentException, если height или width <= 0.
  */
-fun <E> createMatrix(height: Int, width: Int, e: E): Matrix<E> = TODO()
+fun <E> createMatrix(height: Int, width: Int, e: E): Matrix<E> {
+    val myMatrix = MatrixImpl<E>(height, width, e)
+    for (row in 0 until height) {
+        for (column in 0 until width) {
+            myMatrix[row, column] = e
+        }
+    }
+    if (height <= 0 || width <= 0)
+        throw IllegalArgumentException("матрицы не существует")
+    return myMatrix
+}
 
 /**
  * Средняя сложность
  *
  * Реализация интерфейса "матрица"
  */
-class MatrixImpl<E> : Matrix<E> {
-    override val height: Int = TODO()
+class MatrixImpl<E>(override val height: Int, override val width: Int, e: E) : Matrix<E> {
+    private val listOfCell = mutableListOf<E>()
 
-    override val width: Int = TODO()
+    init {
+        for (i in 0 until height * width) {
+            listOfCell.add(e)
+        }
+    }
 
-    override fun get(row: Int, column: Int): E  = TODO()
+    override fun get(row: Int, column: Int): E = listOfCell[row * width + column]
 
-    override fun get(cell: Cell): E  = TODO()
+    override fun get(cell: Cell): E = listOfCell[width * cell.row + cell.column]
 
     override fun set(row: Int, column: Int, value: E) {
-        TODO()
+        listOfCell[row * width + column] = value
     }
 
     override fun set(cell: Cell, value: E) {
-        TODO()
+        listOfCell[cell.row * width + cell.column] = value
     }
 
-    override fun equals(other: Any?) = TODO()
+    override fun equals(other: Any?): Boolean {
+        if (other?.javaClass != javaClass) return false
+        if (this === other) return true
+        other as MatrixImpl<*>
+        if (height != other.height) return false
+        if (width != other.width) return false
+        if (listOfCell != other.listOfCell) return false
+        return true
+    }
 
-    override fun toString(): String = TODO()
+    override fun toString(): String {
+        return "MatrixImpl(height=$height, width=$width, listOfCell=$listOfCell)"
+    }
 }
 
