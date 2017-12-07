@@ -53,8 +53,15 @@ fun alignFile(inputName: String, lineLength: Int, outputName: String) {
  * Регистр букв игнорировать, то есть буквы е и Е считать одинаковыми.
  *
  */
-fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int> = TODO()
-
+fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int> {
+    val str = File(inputName).readText().toLowerCase()
+    val substr = mutableMapOf<String, Int>()
+    for (substring in substrings) {
+        val count = (str.length - str.replace(substring.toLowerCase(), "").length) / substring.length
+        substr.put(substring, count)
+    }
+    return substr
+}
 
 /**
  * Средняя
@@ -70,7 +77,15 @@ fun countSubstrings(inputName: String, substrings: List<String>): Map<String, In
  *
  */
 fun sibilants(inputName: String, outputName: String) {
-    TODO()
+    val symbols = listOf(Pair('Ы', 'И'), Pair('Я', 'А'), Pair('Ю', 'У'), Pair('ы', 'и'),
+            Pair('я', 'а'), Pair('ю', 'у'))
+    val text = File(inputName).readText().toCharArray()
+    for (i in 1 until text.size)
+        if (text[i - 1] in "ЖЧШЩжчшщ" && text[i] in "ЫЯЮыяю")
+            for (j in 0 until symbols.size)
+                if (text[i] == symbols[j].first)
+                    text[i] = symbols[j].second
+    return File(outputName).writeText(text.joinToString(""))
 }
 
 /**
@@ -122,7 +137,27 @@ fun centerFile(inputName: String, outputName: String) {
  * 8) Если входной файл удовлетворяет требованиям 1-7, то он должен быть в точности идентичен выходному файлу
  */
 fun alignFileByWidth(inputName: String, outputName: String) {
-    TODO()
+    var max = 0
+    var final: String
+    var elements: MutableList<String>
+    val res = File(outputName).bufferedWriter()
+    for (line in File(inputName).readLines())
+        if (line.trim().length > max) max = line.trim().length
+    for (line in File(inputName).readLines()) {
+        elements = line.split(" ").filter { it.isNotEmpty() }.toMutableList()
+        if (elements.size <= 1) final = line.trim()
+        else {
+            while (max > elements.joinToString("").length) {
+                for (i in 0 until elements.size - 1)
+                    if (max > elements.joinToString("").length)
+                        elements[i] = elements[i] + " "
+            }
+            final = elements.joinToString("")
+        }
+        res.write(final)
+        res.newLine()
+    }
+    res.close()
 }
 
 /**
