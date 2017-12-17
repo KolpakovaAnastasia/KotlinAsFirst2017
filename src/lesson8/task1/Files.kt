@@ -1,6 +1,7 @@
 @file:Suppress("UNUSED_PARAMETER")
 package lesson8.task1
 
+import lesson7.task2.findHoles
 import java.io.File
 
 /**
@@ -76,17 +77,7 @@ fun countSubstrings(inputName: String, substrings: List<String>): Map<String, In
  * Исключения (жюри, брошюра, парашют) в рамках данного задания обрабатывать не нужно
  *
  */
-fun sibilants(inputName: String, outputName: String) {
-    val symbols = listOf(Pair('Ы', 'И'), Pair('Я', 'А'), Pair('Ю', 'У'), Pair('ы', 'и'),
-            Pair('я', 'а'), Pair('ю', 'у'))
-    val text = File(inputName).readText().toCharArray()
-    for (i in 1 until text.size)
-        if (text[i - 1] in "ЖЧШЩжчшщ" && text[i] in "ЫЯЮыяю")
-            for (j in 0 until symbols.size)
-                if (text[i] == symbols[j].first)
-                    text[i] = symbols[j].second
-    return File(outputName).writeText(text.joinToString(""))
-}
+fun sibilants(inputName: String, outputName: String) = { TODO() }
 
 /**
  * Средняя

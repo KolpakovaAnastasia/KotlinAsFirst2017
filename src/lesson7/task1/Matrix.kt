@@ -77,7 +77,7 @@ class MatrixImpl<E>(override val height: Int, override val width: Int, e: E) : M
     }
 
     override fun equals(other: Any?): Boolean {
-        if (other?.javaClass != javaClass) return false
+        if (other?.javaClass is Matrix<*>) return true
         if (this === other) return true
         other as MatrixImpl<*>
         if (height != other.height) return false
@@ -87,7 +87,13 @@ class MatrixImpl<E>(override val height: Int, override val width: Int, e: E) : M
     }
 
     override fun toString(): String {
-        return "MatrixImpl(height=$height, width=$width, listOfCell=$listOfCell)"
+        var s: String = ""
+        for (i in 0..height - 1) {
+            for (j in 0..width - 1) {
+                s += "${(this[i, j])} "
+            }
+            s += "\n"
+        }
+        return s
     }
 }
-
