@@ -1,7 +1,5 @@
 @file:Suppress("UNUSED_PARAMETER")
 package lesson8.task1
-
-import lesson7.task2.findHoles
 import java.io.File
 
 /**
